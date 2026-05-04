@@ -275,8 +275,8 @@ function setLoading(btn, loading) {
 }
 
 async function downloadExcel(btn) {
-  setLoading(btn, true);
   try {
+    if (btn) setLoading(btn, true);
     alert("Génération en cours...");
     const { blob, fileName } = await exportExcel();
     alert("Fichier prêt, téléchargement...");
@@ -284,7 +284,7 @@ async function downloadExcel(btn) {
   } catch(e) {
     alert("Erreur : " + e.message);
   } finally {
-    setLoading(btn, false);
+    if (btn) setLoading(btn, false);
   }
 }
 
