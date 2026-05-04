@@ -274,24 +274,17 @@ function setLoading(btn, loading) {
   btn.style.opacity = loading ? "0.6" : "1";
 }
 
-async function downloadExcel() {
-  const btn = event.currentTarget;
+async function downloadExcel(btn) {
   setLoading(btn, true);
   try {
     const { blob, fileName } = await exportExcel();
     const url = URL.createObjectURL(blob);
-
-    // iOS Safari : ouvrir dans un nouvel onglet
-    if (/iP(hone|ad|od)/i.test(navigator.userAgent)) {
-      window.open(url, '_blank');
-    } else {
-      const a   = document.createElement('a');
-      a.href     = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
+    const a   = document.createElement('a');
+    a.href     = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 3000);
   } catch(e) {
     alert("Erreur : " + e.message);
@@ -300,8 +293,7 @@ async function downloadExcel() {
   }
 }
 
-async function shareExcel() {
-  const btn = event.currentTarget;
+async function shareExcel(btn) {
   setLoading(btn, true);
   try {
     const { blob, fileName, week, date } = await exportExcel();
@@ -311,18 +303,13 @@ async function shareExcel() {
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], title: `Rapport Graffitrain — Semaine ${week}`, text: message });
     } else {
-      // Fallback : même logique que téléchargement
       const url = URL.createObjectURL(blob);
-      if (/iP(hone|ad|od)/i.test(navigator.userAgent)) {
-        window.open(url, '_blank');
-      } else {
-        const a   = document.createElement('a');
-        a.href     = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
+      const a   = document.createElement('a');
+      a.href     = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 3000);
     }
   } catch(e) {
@@ -380,8 +367,8 @@ async function render() {
 
       <div class="top-actions">
         <button class="main" onclick="resetAll()">Nouvelle tournée</button>
-        <button class="export" onclick="downloadExcel()">⬇️ Télécharger</button>
-        <button class="share" onclick="shareExcel()">📤 Partager</button>
+        <button class="export" onclick="downloadExcel(this)">⬇️ Télécharger</button>
+        <button class="share" onclick="shareExcel(this)">📤 Partager</button>
       </div>
 
       <div class="add-box">
