@@ -269,23 +269,40 @@ async function exportExcel() {
   return { blob, fileName, week, date };
 }
 
+function setLoading(btn, loading) {
+  btn.disabled    = loading;
+  btn.style.opacity = loading ? "0.6" : "1";
+}
+
 async function downloadExcel() {
+  const btn = event.currentTarget;
+  setLoading(btn, true);
   try {
     const { blob, fileName } = await exportExcel();
     const url = URL.createObjectURL(blob);
-    const a   = document.createElement('a');
-    a.href     = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+    // iOS Safari : ouvrir dans un nouvel onglet
+    if (/iP(hone|ad|od)/i.test(navigator.userAgent)) {
+      window.open(url, '_blank');
+    } else {
+      const a   = document.createElement('a');
+      a.href     = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
   } catch(e) {
-    alert("Erreur lors de la génération du fichier.");
+    alert("Erreur : " + e.message);
+  } finally {
+    setLoading(btn, false);
   }
 }
 
 async function shareExcel() {
+  const btn = event.currentTarget;
+  setLoading(btn, true);
   try {
     const { blob, fileName, week, date } = await exportExcel();
     const file    = new File([blob], fileName, { type: blob.type });
@@ -294,17 +311,24 @@ async function shareExcel() {
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], title: `Rapport Graffitrain — Semaine ${week}`, text: message });
     } else {
+      // Fallback : même logique que téléchargement
       const url = URL.createObjectURL(blob);
-      const a   = document.createElement('a');
-      a.href     = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      if (/iP(hone|ad|od)/i.test(navigator.userAgent)) {
+        window.open(url, '_blank');
+      } else {
+        const a   = document.createElement('a');
+        a.href     = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+      setTimeout(() => URL.revokeObjectURL(url), 3000);
     }
   } catch(e) {
-    if (e.name !== 'AbortError') alert("Erreur lors du partage.");
+    if (e.name !== 'AbortError') alert("Erreur : " + e.message);
+  } finally {
+    setLoading(btn, false);
   }
 }
 
