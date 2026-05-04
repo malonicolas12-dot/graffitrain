@@ -266,23 +266,46 @@ async function exportExcel() {
   const cleanDate = date.replaceAll("/", "-");
   const fileName  = `Rapport_Graffitrain_S${week}_${cleanDate}.xlsx`;
   const blob      = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  return { blob, fileName, week, date };
+}
 
-  const message = `Bonjour,\n\nVeuillez trouver ci-joint le rapport de contrôle des trains de la ligne 6 pour la semaine ${week} du ${date}.\n\nCordialement,\nPôle Propreté — Ligne 6`;
-
-  if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName)] })) {
-    const file = new File([blob], fileName, { type: blob.type });
-    await navigator.share({
-      files: [file],
-      title: `Rapport Graffitrain — Semaine ${week}`,
-      text: message
-    });
-  } else {
-    saveAs(blob, fileName);
+async function downloadExcel() {
+  try {
+    const { blob, fileName } = await exportExcel();
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement('a');
+    a.href     = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  } catch(e) {
+    alert("Erreur lors de la génération du fichier.");
   }
 }
 
 async function shareExcel() {
-  await exportExcel();
+  try {
+    const { blob, fileName, week, date } = await exportExcel();
+    const file    = new File([blob], fileName, { type: blob.type });
+    const message = `Bonjour,\n\nVeuillez trouver ci-joint le rapport de contrôle des trains de la ligne 6 pour la semaine ${week} du ${date}.\n\nCordialement,\nPôle Propreté — Ligne 6`;
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: `Rapport Graffitrain — Semaine ${week}`, text: message });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a   = document.createElement('a');
+      a.href     = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+  } catch(e) {
+    if (e.name !== 'AbortError') alert("Erreur lors du partage.");
+  }
 }
 
 // ── Rendu ────────────────────────────────────────────────────────────────────
@@ -333,7 +356,7 @@ async function render() {
 
       <div class="top-actions">
         <button class="main" onclick="resetAll()">Nouvelle tournée</button>
-        <button class="export" onclick="exportExcel()">⬇️ Télécharger</button>
+        <button class="export" onclick="downloadExcel()">⬇️ Télécharger</button>
         <button class="share" onclick="shareExcel()">📤 Partager</button>
       </div>
 
