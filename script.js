@@ -277,9 +277,7 @@ function setLoading(btn, loading) {
 async function downloadExcel(btn) {
   try {
     if (btn) setLoading(btn, true);
-    alert("Génération en cours...");
     const { blob, fileName } = await exportExcel();
-    alert("Fichier prêt, téléchargement...");
     saveAs(blob, fileName);
   } catch(e) {
     alert("Erreur : " + e.message);
@@ -289,28 +287,23 @@ async function downloadExcel(btn) {
 }
 
 async function shareExcel(btn) {
-  setLoading(btn, true);
   try {
+    if (btn) setLoading(btn, true);
     const { blob, fileName, week, date } = await exportExcel();
-    const file    = new File([blob], fileName, { type: blob.type });
-    const message = `Bonjour,\n\nVeuillez trouver ci-joint le rapport de contrôle des trains de la ligne 6 pour la semaine ${week} du ${date}.\n\nCordialement,\nPôle Propreté — Ligne 6`;
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: `Rapport Graffitrain — Semaine ${week}`, text: message });
-    } else {
-      const url = URL.createObjectURL(blob);
-      const a   = document.createElement('a');
-      a.href     = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 3000);
-    }
+    // 1. Télécharger le fichier
+    saveAs(blob, fileName);
+
+    // 2. Ouvrir un email pré-rempli
+    const subject = encodeURIComponent(`Rapport Graffitrain — Semaine ${week}`);
+    const body    = encodeURIComponent(`Bonjour,\n\nVeuillez trouver ci-joint le rapport de contrôle des trains de la ligne 6 pour la semaine ${week} du ${date}.\n\nCordialement,\nPôle Propreté — Ligne 6`);
+    window.open(`mailto:?subject=${subject}&body=${body}`);
+
+    alert(`Le fichier "${fileName}" a été téléchargé.\nJoignez-le à l'email qui vient de s'ouvrir.`);
   } catch(e) {
-    if (e.name !== 'AbortError') alert("Erreur : " + e.message);
+    alert("Erreur : " + e.message);
   } finally {
-    setLoading(btn, false);
+    if (btn) setLoading(btn, false);
   }
 }
 
