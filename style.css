@@ -1,0 +1,404 @@
+/* Couleurs RATP Ligne 6 */
+:root{
+  --l6:       #6dc17e;
+  --l6-dark:  #4a9e5c;
+  --bg:       #0f1923;
+  --surface:  #1a2b3c;
+  --surface2: #223044;
+  --text:     #e8f0e9;
+  --muted:    #7a9aaa;
+}
+
+body.light{
+  --bg:       #f0f4f1;
+  --surface:  #ffffff;
+  --surface2: #deeee3;
+  --text:     #0f1923;
+  --muted:    #5a7a6a;
+}
+
+body{
+  margin:0;
+  font-family:'Barlow', Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.app{
+  max-width:650px;
+  margin:auto;
+  padding:16px;
+}
+
+/* ── Header ── */
+.header-wrap{
+  position:relative;
+  margin:-16px -16px 20px -16px;
+}
+
+.theme-toggle{
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:rgba(0,0,0,.2);
+  color:white;
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:20px;
+  box-shadow:none;
+  font-weight:normal;
+  z-index:1;
+}
+
+body.light .theme-toggle{
+  background:rgba(0,0,0,.15);
+  color:#0f1923;
+}
+
+h1{
+  text-align:center;
+  background:var(--l6);
+  color:#0f1923;
+  padding:22px 16px 18px;
+  border-radius:0 0 28px 28px;
+  margin:0;
+  box-shadow:0 4px 20px rgba(109,193,126,.35);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+
+.h1-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.h1-logo{
+  width:44px;
+  height:44px;
+}
+
+.h1-title{
+  font-family:'Barlow Condensed', Arial, sans-serif;
+  font-weight:900;
+  font-size:32px;
+  letter-spacing:1px;
+  color:#0f1923;
+  line-height:1;
+}
+
+.h1-sub{
+  font-family:'Barlow Condensed', Arial, sans-serif;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:#1a3a22;
+}
+
+/* ── Stats ── */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin:12px 0 16px 0;
+}
+
+.stat{
+  background:var(--surface);
+  border:2px solid var(--surface2);
+  border-radius:14px;
+  padding:10px 6px;
+  text-align:center;
+  font-size:13px;
+  color:var(--text);
+  box-shadow:0 3px 10px rgba(0,0,0,.25);
+  font-weight:bold;
+}
+
+/* ── Boutons principaux ── */
+.top-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+@media(max-width:480px){
+  .top-actions{ grid-template-columns:1fr 1fr; }
+}
+
+.add-box{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  margin-bottom:16px;
+}
+
+input{
+  padding:12px;
+  border-radius:12px;
+  border:2px solid var(--surface2);
+  background:var(--surface);
+  color:var(--text);
+  font-size:15px;
+}
+
+input::placeholder{ color:var(--muted); }
+
+button{
+  padding:11px;
+  border:0;
+  border-radius:12px;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 3px 8px rgba(0,0,0,.3);
+  font-size:14px;
+}
+
+.main  { background:var(--surface2); color:var(--l6); border:2px solid var(--l6); }
+.export{ background:var(--l6); color:#0f1923; }
+.share { background:#1f6fb2; color:white; }
+.add   { background:var(--l6); color:#0f1923; }
+
+/* ── Cartes trains ── */
+.train{
+  border-radius:18px;
+  padding:14px;
+  margin-bottom:14px;
+  box-shadow:0 5px 18px rgba(0,0,0,.35);
+  border-left:14px solid #334;
+  border-top:2px solid transparent;
+  border-right:2px solid transparent;
+  border-bottom:2px solid transparent;
+}
+
+.train.ok-card{
+  background:#0d2b1a;
+  border-color:#007a53;
+}
+.train.graffiti-card{
+  background:#2b0d0d;
+  border-color:#d71920;
+  box-shadow:0 0 0 3px #d71920, 0 7px 22px rgba(215,25,32,.3);
+}
+.train.sale-card{
+  background:#2b1a0a;
+  border-color:#7b4a24;
+  box-shadow:0 0 0 3px #7b4a24, 0 7px 22px rgba(123,74,36,.3);
+}
+.train.pasvu-card{
+  background:var(--surface);
+  border-color:#334;
+}
+
+/* Mode clair — cartes */
+body.light .train.ok-card      { background:#d4f5e2; }
+body.light .train.graffiti-card{ background:#ffd6d6; box-shadow:0 0 0 3px #d71920, 0 7px 22px rgba(215,25,32,.2); }
+body.light .train.sale-card    { background:#f5dfc0; box-shadow:0 0 0 3px #7b4a24, 0 7px 22px rgba(123,74,36,.2); }
+body.light .train.pasvu-card   { border-color:#c0cfc4; }
+
+.train-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.train-title{
+  font-family:'Barlow Condensed', Arial, sans-serif;
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.ok-card      .train-title{ color:#4dde8a; }
+.graffiti-card .train-title{ color:#ff6b6b; }
+.sale-card    .train-title{ color:#e0965a; }
+.pasvu-card   .train-title{ color:var(--muted); }
+
+body.light .ok-card      .train-title{ color:#007a53; }
+body.light .graffiti-card .train-title{ color:#b00000; }
+body.light .sale-card    .train-title{ color:#7b4a24; }
+
+.badge{
+  display:inline-block;
+  margin-top:6px;
+  font-size:13px;
+  padding:5px 12px;
+  border-radius:999px;
+  background:transparent;
+  font-weight:900;
+  border:2px solid currentColor;
+}
+
+.ok-card      .badge{ color:#4dde8a; }
+.graffiti-card .badge{ color:#ff6b6b; }
+.sale-card    .badge{ color:#e0965a; }
+.pasvu-card   .badge{ color:var(--muted); }
+
+body.light .ok-card      .badge{ color:#007a53; }
+body.light .graffiti-card .badge{ color:#b00000; }
+body.light .sale-card    .badge{ color:#7b4a24; }
+
+/* ── Boutons statut ── */
+.buttons{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.ok      { background:#007a53; }
+.graffiti{ background:#d71920; }
+.sale    { background:#7b4a24; }
+
+.active{
+  transform:scale(1.06);
+  outline:3px solid white;
+  box-shadow:0 0 0 4px rgba(255,255,255,.15), 0 8px 20px rgba(0,0,0,.4);
+  filter:brightness(1.15);
+}
+
+.delete-train{
+  background:transparent;
+  border:2px solid #445;
+  color:var(--muted);
+  white-space:nowrap;
+  font-size:12px;
+  padding:8px 10px;
+}
+
+/* ── Photos ── */
+.surface-box{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.surface-label{
+  font-family:'Barlow Condensed', Arial, sans-serif;
+  font-weight:700;
+  font-size:15px;
+  letter-spacing:.5px;
+  color:var(--text);
+  white-space:nowrap;
+}
+
+.surface-input-wrap{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.surface-input{
+  width:80px;
+  padding:8px 10px;
+  font-size:18px;
+  font-weight:700;
+  text-align:center;
+  border:2px solid #d71920;
+  background:var(--surface);
+  color:var(--text);
+  border-radius:10px;
+}
+
+.surface-unit{
+  font-family:'Barlow Condensed', Arial, sans-serif;
+  font-size:18px;
+  font-weight:700;
+  color:#ff6b6b;
+}
+
+.photo-btn{
+  margin-top:10px;
+  background:var(--surface2);
+  color:var(--l6);
+  border:2px solid var(--l6);
+  width:100%;
+}
+
+.photo-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+
+.photo{
+  width:100%;
+  border-radius:12px;
+  border:2px solid var(--surface2);
+}
+
+.delete{
+  background:#7f1d1d;
+  margin-top:6px;
+  width:100%;
+  font-size:12px;
+  padding:8px;
+}
+
+/* ── Menu photo (bottom sheet) ── */
+#photo-menu{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+}
+
+.photo-menu-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.6);
+}
+
+.photo-menu-sheet{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  background:var(--surface);
+  border-radius:24px 24px 0 0;
+  padding:20px 16px 36px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  box-shadow:0 -4px 30px rgba(0,0,0,.5);
+}
+
+.photo-menu-sheet::before{
+  content:"";
+  display:block;
+  width:40px;
+  height:4px;
+  background:var(--surface2);
+  border-radius:999px;
+  margin:0 auto 8px;
+}
+
+.photo-menu-btn{
+  background:var(--l6);
+  color:#0f1923;
+  font-size:16px;
+  padding:15px;
+}
+
+.photo-menu-cancel{
+  background:var(--surface2);
+  color:var(--muted);
+  font-size:16px;
+  padding:15px;
+}
+
+/* ── Responsive ── */
+@media(max-width:480px){
+  .stats       { grid-template-columns:repeat(2,1fr); }
+  .top-actions { grid-template-columns:1fr; }
+  .buttons     { grid-template-columns:1fr; }
+  .photo-list  { grid-template-columns:1fr; }
+}
