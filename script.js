@@ -277,15 +277,10 @@ function setLoading(btn, loading) {
 async function downloadExcel(btn) {
   setLoading(btn, true);
   try {
+    alert("Génération en cours...");
     const { blob, fileName } = await exportExcel();
-    const url = URL.createObjectURL(blob);
-    const a   = document.createElement('a');
-    a.href     = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    alert("Fichier prêt, téléchargement...");
+    saveAs(blob, fileName);
   } catch(e) {
     alert("Erreur : " + e.message);
   } finally {
